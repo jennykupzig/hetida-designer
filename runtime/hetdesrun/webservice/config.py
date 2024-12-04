@@ -117,8 +117,8 @@ class RuntimeConfig(BaseSettings):
         False,
         env="HD_ENABLE_CACHING_FOR_NON_DRAFT_TRAFOS_FOR_EXEC",
         description=(
-            "Cache transformation revisions for execution if their state is not DRAFT."
-            "Instead of always loading them from the database."
+            "Cache transformation revisions for execution if their state is not DRAFT. "
+            "Instead of always loading them from the database. "
             "The caching mechanism is NOT thread-safe."
         ),
     )
@@ -335,6 +335,9 @@ class RuntimeConfig(BaseSettings):
         "kafka|Kafka Adapter"
         "|http://localhost:8090/adapters/kafka"
         "|http://localhost:8090/adapters/kafka,"
+        "virtual-structure-adapter|Virtual Structure Adapter"
+        "|http://localhost:8080/adapters/virtual_structure"
+        "|http://localhost:8090/adapters/virtual_structure,"
         "external-sources|External Sources"
         "|http://localhost:8090/adapters/external_sources"
         "|http://localhost:8090/adapters/external_sources",

@@ -332,7 +332,9 @@ debugpy==1.8.13 \
     --hash=sha256:ed93c3155fc1f888ab2b43626182174e457fc31b7781cd1845629303790b8ad1 \
     --hash=sha256:eee02b2ed52a563126c97bf04194af48f2fe1f68bb522a312b05935798e922ff \
     --hash=sha256:f14d2c4efa1809da125ca62df41050d9c7cd9cb9e380a2685d1e453c4d450ccb
-    # via ipykernel
+    # via
+    #   -r ./requirements-dev.in
+    #   ipykernel
 decorator==5.2.1 \
     --hash=sha256:65f266143752f734b0a7cc83c46f4618af75b8c5911b00ccb61d0ac9b6da0360 \
     --hash=sha256:d316bb415a2d9e2d2b3abcc4084c6502fc09240e292cd76a76afc106a1c8e04a
@@ -344,7 +346,9 @@ execnet==2.1.1 \
 executing==2.2.0 \
     --hash=sha256:11387150cad388d62750327a53d3339fad4888b39a6fe233c3afbb54ecffd3aa \
     --hash=sha256:5d108c028108fe2551d1a7b2e8b713341e2cb4fc0aa7dcf966fa4327a5226755
-    # via stack-data
+    # via
+    #   -c ./requirements.txt
+    #   stack-data
 idna==3.10 \
     --hash=sha256:12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9 \
     --hash=sha256:946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3

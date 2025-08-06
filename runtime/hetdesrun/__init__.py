@@ -17,6 +17,7 @@ from hetdesrun.runtime.logging import (
 )
 from hetdesrun.webservice.config import get_config
 
+
 migrations_invoked_from_py = False
 
 try:
@@ -25,6 +26,24 @@ try:
 except FileNotFoundError:
     VERSION = "dev snapshot"
 
+if get_config().is_runtime_service and not get_config().is_runtime_service:
+    NAME = "is_backend"
+elif not get_config().is_runtime_service and get_config().is_runtime_service:
+    NAME = "is_runtime"
+elif get_config().is_runtime_service and get_config().is_runtime_service:
+    NAME = "is_runtime_and_backend"
+else:
+    NAME = "is_not_configured"
+
+if get_config().log_use_logfire:
+    import logfire
+
+    logfire.configure(
+        send_to_logfire=False,
+        service_name=NAME,
+        service_version=VERSION
+    )
+    logging.basicConfig(handlers=[logfire.LogfireLoggingHandler()])
 
 # Processors that should run on all stdlib logging entries
 SHARED_PROCESSORS: list[Processor] = [

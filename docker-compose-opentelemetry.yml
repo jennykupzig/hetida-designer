@@ -1,0 +1,48 @@
+volumes:
+  postgres_data:
+    driver: local
+  designer_obj_repo:
+    driver: local
+  local_files:
+    driver: local
+
+services:
+  hetida-designer-frontend:
+    image: hetida/designer-frontend:latest
+    ports:
+      - 80:8080
+    depends_on:
+      hetida-designer-demo-adapter-python:
+        condition: service_started
+
+
+  alternative-backend-opentelemetry:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - 4318:4318
+      - 16686:16686
+
+  hetida-designer-db:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: hetida_designer_db
+      POSTGRES_USER: hetida_designer_dbuser
+      POSTGRES_PASSWORD: hetida_designer_dbpasswd
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hetida_designer_dbuser -d hetida_designer_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  hetida-designer-demo-adapter-python:
+    image: hetida/designer-demo-adapter-python
+    ports:
+      - 8092:8092
+
+networks:
+  default:
+    name: hetida-designer-network

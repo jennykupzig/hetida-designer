@@ -1,6 +1,29 @@
 {
     "configurations": [
         {
+            "name": "hd_backend_runtime",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./main.py",
+            "cwd": "./runtime",
+            "console": "integratedTerminal",
+            "env": {
+                "HD_IS_BACKEND_SERVICE":"true",
+                "HD_IS_RUNTIME_SERVICE":"true",
+                "HD_USE_AUTH":"false",
+                "MAX_WORKERS":"1",
+                "LOG_LEVEL":"DEBUG",
+                "LOG_HTTPX":"true",
+                "HETIDA_DESIGNER_PURE_UVICORN":"true",
+                "LOG_DIRECT_PROVISIONING_OUTPUTS":"true",
+                "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT":"http://localhost:4318/v1/traces",
+                "HD_DATABASE_URL":"postgresql+psycopg2://hetida_designer_dbuser:hetida_designer_dbpasswd@localhost:5432/hetida_designer_db",
+                "HD_ENSURE_DB_SCHEMA":"true",
+                "PORT":"8080",
+
+            }
+        },
+        {
             "type": "java",
             "name": "Spring Boot-HetidaDesignerBackendApplication<backend>",
             "request": "launch",
@@ -8,7 +31,7 @@
             "console": "internalConsole",
             "mainClass": "org.hetida.designer.backend.HetidaDesignerBackendApplication",
             "projectName": "backend",
-            "args": "--spring.profiles.active=local",  
-        }
+            "args": "--spring.profiles.active=local",
+        },
     ]
 }

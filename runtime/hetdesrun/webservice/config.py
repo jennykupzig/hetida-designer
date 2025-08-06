@@ -71,6 +71,15 @@ class RuntimeConfig(BaseSettings):
         ),
     )
 
+    log_use_logfire: bool = Field(
+        True,
+        description=(
+            "Whether to use logfire to send logs to opentelemetry backend" \
+            "which is defined via OTEL_EXPORTER_OTLP_ENDPOINT"
+        ),
+        validation_alias="LOG_USE_LOGFIRE",
+    )
+
     log_httpx: bool = Field(
         False,
         description=(

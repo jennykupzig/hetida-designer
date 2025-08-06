@@ -1,6 +1,7 @@
 -c requirements.txt
 -c requirements-base.txt
 coverage
+debugpy
 ipykernel
 moto
 mypy

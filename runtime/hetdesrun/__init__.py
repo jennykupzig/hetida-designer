@@ -35,18 +35,10 @@ elif get_config().is_runtime_service and get_config().is_runtime_service:
 else:
     NAME = "is_not_configured"
 
-if get_config().log_use_logfire:
-    import logfire
-
-    logfire.configure(
-        send_to_logfire=False,
-        service_name=NAME,
-        service_version=VERSION
-    )
-    logging.basicConfig(handlers=[logfire.LogfireLoggingHandler()])
 
 # Processors that should run on all stdlib logging entries
 SHARED_PROCESSORS: list[Processor] = [
+    structlog.contextvars.merge_contextvars,
     structlog.processors.TimeStamper(fmt="iso", utc=True),
     structlog.stdlib.add_log_level,
     structlog.stdlib.add_logger_name,
@@ -60,6 +52,18 @@ SHARED_PROCESSORS: list[Processor] = [
     structlog.processors.format_exc_info,
     structlog.processors.StackInfoRenderer(),
 ]
+
+if get_config().log_use_logfire:
+    import logfire
+
+    logfire.configure(
+        send_to_logfire=False,
+        service_name=NAME,
+        service_version=VERSION
+    )
+    #logging.basicConfig(handlers=[logfire.LogfireLoggingHandler()]) # führt zu doppelten logs!
+
+    SHARED_PROCESSORS.insert(-1, logfire.StructlogProcessor())
 
 # Configure structlog
 structlog.configure(

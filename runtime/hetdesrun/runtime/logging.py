@@ -159,11 +159,8 @@ class ExecutionContextFilter(logging.Filter):
         for key in args:
             ctx_dict.pop(key, None)  # type: ignore
 
-        structlog.contextvars.clear_contextvars()
 
     def clear_context(self, keys: list[str] | None = None) -> None:
-
-        structlog.contextvars.clear_contextvars()
 
         if keys is None:
             # reset / empty everything
@@ -189,25 +186,29 @@ class ExecutionContextFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> Literal[True]:  # noqa: A003
         context_dict = _get_execution_context()
 
-        structlog.contextvars.clear_contextvars()
-        structlog.contextvars.bind_contextvars(
-            currently_executed_transformation_id = context_dict.get(  # type: ignore
-            "currently_executed_transformation_id", None),
-            currently_executed_transformation_name = context_dict.get(  # type: ignore
-            "currently_executed_transformation_name", None),
-            currently_executed_transformation_tag = context_dict.get(  # type: ignore
-            "currently_executed_transformation_tag", None),
-            currently_executed_transformation_type = context_dict.get(  # type: ignore
-            "currently_executed_transformation_type", None),
-            currently_executed_operator_hierarchical_id = context_dict.get(  # type: ignore
-            "currently_executed_operator_hierarchical_id", None),
-            currently_executed_operator_hierarchical_name = context_dict.get(  # type: ignore
-            "currently_executed_operator_hierarchical_name", None),
-            currently_executed_job_id = context_dict.get(  # type: ignore
-            "currently_executed_job_id", None)
-            )
-
+        record.currently_executed_transformation_id = context_dict.get(  # type: ignore
+            "currently_executed_transformation_id", None
+        )
+        record.currently_executed_transformation_name = context_dict.get(  # type: ignore
+            "currently_executed_transformation_name", None
+        )
+        record.currently_executed_transformation_tag = context_dict.get(  # type: ignore
+            "currently_executed_transformation_tag", None
+        )
+        record.currently_executed_transformation_type = context_dict.get(  # type: ignore
+            "currently_executed_transformation_type", None
+        )
+        record.currently_executed_operator_hierarchical_id = context_dict.get(  # type: ignore
+            "currently_executed_operator_hierarchical_id", None
+        )
+        record.currently_executed_operator_hierarchical_name = context_dict.get(  # type: ignore
+            "currently_executed_operator_hierarchical_name", None
+        )
+        record.currently_executed_job_id = context_dict.get(  # type: ignore
+            "currently_executed_job_id", None
+        )
         return True
+
 
 
 execution_context_filter = ExecutionContextFilter()
@@ -280,11 +281,9 @@ class JobIdContextFilter(logging.Filter):
         ctx_dict = _get_job_id_context()
         for key in args:
             ctx_dict.pop(key, None)
-        structlog.contextvars.clear_contextvars()
 
     def clear_context(self) -> None:
         _JOB_ID_LOGGING_CONTEXT_VAR.set({})
-        structlog.contextvars.clear_contextvars()
 
     def get_value(self, key: str) -> str | None | UUID:
         context_dict = _get_job_id_context()
@@ -293,15 +292,11 @@ class JobIdContextFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> Literal[True]:  # noqa: A003
         context_dict = _get_job_id_context()
 
-        structlog.contextvars.clear_contextvars()
-        structlog.contextvars.bind_contextvars(
-            currently_executed_job_id = context_dict.get(  # type: ignore
-            "currently_executed_job_id", None))
-
         record.currently_executed_job_id = context_dict.get(  # type: ignore
             "currently_executed_job_id", None
         )
         return True
+
 
 
 job_id_context_filter = JobIdContextFilter()

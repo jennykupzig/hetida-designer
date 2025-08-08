@@ -1740,6 +1740,7 @@ opentelemetry-api==1.36.0 \
     #   opentelemetry-instrumentation-asgi
     #   opentelemetry-instrumentation-fastapi
     #   opentelemetry-instrumentation-httpx
+    #   opentelemetry-instrumentation-sqlalchemy
     #   opentelemetry-sdk
     #   opentelemetry-semantic-conventions
 opentelemetry-exporter-otlp-proto-common==1.36.0 \
@@ -1758,6 +1759,7 @@ opentelemetry-instrumentation==0.57b0 \
     #   opentelemetry-instrumentation-asgi
     #   opentelemetry-instrumentation-fastapi
     #   opentelemetry-instrumentation-httpx
+    #   opentelemetry-instrumentation-sqlalchemy
 opentelemetry-instrumentation-asgi==0.57b0 \
     --hash=sha256:47debbde6af066a7e8e911f7193730d5e40d62effc1ac2e1119908347790a3ea \
     --hash=sha256:a6f880b5d1838f65688fc992c65fbb1d3571f319d370990c32e759d3160e510b
@@ -1769,6 +1771,10 @@ opentelemetry-instrumentation-fastapi==0.57b0 \
 opentelemetry-instrumentation-httpx==0.57b0 \
     --hash=sha256:729fef97624016d3e5b03b71f51c9a1a2f7480b023373186d643fbed7496712a \
     --hash=sha256:ea5669cdb17185f8d247c2dbf756ae5b95b53110ca4d58424f2be5cc7223dbdd
+    # via logfire
+opentelemetry-instrumentation-sqlalchemy==0.57b0 \
+    --hash=sha256:8a1a815331cb04fc95aa7c50e9c681cdccfb12e1fa4522f079fe4b24753ae106 \
+    --hash=sha256:95667326b7cc22bb4bc9941f98ca22dd177679f9a4d277646cc21074c0d732ff
     # via logfire
 opentelemetry-proto==1.36.0 \
     --hash=sha256:0f10b3c72f74c91e0764a5ec88fd8f1c368ea5d9c64639fb455e2854ef87dd2f \
@@ -1790,6 +1796,7 @@ opentelemetry-semantic-conventions==0.57b0 \
     #   opentelemetry-instrumentation-asgi
     #   opentelemetry-instrumentation-fastapi
     #   opentelemetry-instrumentation-httpx
+    #   opentelemetry-instrumentation-sqlalchemy
     #   opentelemetry-sdk
 opentelemetry-util-http==0.57b0 \
     --hash=sha256:e54c0df5543951e471c3d694f85474977cd5765a3b7654398c83bab3d2ffb8e9 \
@@ -1936,6 +1943,7 @@ packaging==24.2 \
     #   keras
     #   matplotlib
     #   opentelemetry-instrumentation
+    #   opentelemetry-instrumentation-sqlalchemy
     #   plotly
     #   pmdarima
     #   pyogrio
@@ -3362,6 +3370,7 @@ wrapt==1.17.2 \
     # via
     #   opentelemetry-instrumentation
     #   opentelemetry-instrumentation-httpx
+    #   opentelemetry-instrumentation-sqlalchemy
 xarray==2025.3.0 \
     --hash=sha256:022b7eac5ebc26d70d34211de732ec1a15127a40455f9492acdde7fbe5bbf091 \
     --hash=sha256:531cf6d64e6ab54c19239930a840654f1a79d2140e9f0d11d1e8d69dcc581d0f

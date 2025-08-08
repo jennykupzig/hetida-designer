@@ -111,10 +111,9 @@ class RuntimeConfig(BaseSettings):
             "currently_executed_transformation_type": "tr_type",
             "currently_executed_operator_hierarchical_id": "op_id",
             "currently_executed_operator_hierarchical_name": "op_name",
-            "event": "message",
         },
         description="Dict of log field names to be renamed, before the log is rendered as a JSON. "
-        "Keys are looked up in the event dict and replaced with the corresponding value.",
+        "Keys are looked up in the event dict and replaced with the corresponding value. Please do not mess with 'event' here.",
         validation_alias="LOG_FIELDS_TO_RENAME",
     )
 

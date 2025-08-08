@@ -17,6 +17,8 @@ from hetdesrun.runtime.logging import (
 )
 from hetdesrun.webservice.config import get_config
 
+if get_config().log_use_logfire:
+    import logfire
 
 migrations_invoked_from_py = False
 
@@ -26,11 +28,11 @@ try:
 except FileNotFoundError:
     VERSION = "dev snapshot"
 
-if get_config().is_runtime_service and not get_config().is_runtime_service:
-    NAME = "is_backend"
-elif not get_config().is_runtime_service and get_config().is_runtime_service:
+if get_config().is_runtime_service and not get_config().is_backend_service:
     NAME = "is_runtime"
-elif get_config().is_runtime_service and get_config().is_runtime_service:
+elif not get_config().is_runtime_service and get_config().is_backend_service:
+    NAME = "is_backend"
+elif get_config().is_runtime_service and get_config().is_backend_service:
     NAME = "is_runtime_and_backend"
 else:
     NAME = "is_not_configured"
@@ -38,10 +40,10 @@ else:
 
 # Processors that should run on all stdlib logging entries
 SHARED_PROCESSORS: list[Processor] = [
-    structlog.contextvars.merge_contextvars,
-    structlog.processors.TimeStamper(fmt="iso", utc=True),
-    structlog.stdlib.add_log_level,
-    structlog.stdlib.add_logger_name,
+    # 1 Processor = 1 Field
+    structlog.processors.TimeStamper(fmt="iso", utc=True), #timestamp hinzu
+    structlog.stdlib.add_log_level, # log level
+    structlog.stdlib.add_logger_name, # logger name
     structlog.processors.CallsiteParameterAdder(
         {
             structlog.processors.CallsiteParameter.FILENAME,
@@ -49,19 +51,20 @@ SHARED_PROCESSORS: list[Processor] = [
             structlog.processors.CallsiteParameter.LINENO,
         }
     ),
-    structlog.processors.format_exc_info,
+    structlog.processors.format_exc_info, #for exception propagation
+    CustomAttributeProcessor(),  # to get added fields from logging.filters in records
+    structlog.stdlib.ProcessorFormatter.remove_processors_meta, # removes unneccesary information
+    FieldRenamer(), # renames fields
     structlog.processors.StackInfoRenderer(),
 ]
 
 if get_config().log_use_logfire:
-    import logfire
 
     logfire.configure(
         send_to_logfire=False,
         service_name=NAME,
         service_version=VERSION
     )
-    #logging.basicConfig(handlers=[logfire.LogfireLoggingHandler()]) # führt zu doppelten logs!
 
     SHARED_PROCESSORS.insert(-1, logfire.StructlogProcessor())
 
@@ -86,9 +89,7 @@ def get_formatter(
         # Run on all entries
         processors=(
             [
-                CustomAttributeProcessor(),
-                structlog.stdlib.ProcessorFormatter.remove_processors_meta,
-                FieldRenamer(),
+                structlog.processors.EventRenamer(to="message"), # rename event to message
                 structlog.processors.JSONRenderer(
                     default=MinimallyMoreCapableJsonEncoder().default
                 ),
@@ -179,7 +180,6 @@ def setup_third_party_loggers(
 
 if get_config().log_httpx:
     if get_config().log_use_logfire:
-        import logfire
         logfire.instrument_httpx()
     setup_third_party_loggers(["httpx", "httpcore"], configure=True, log_job_id_context=True)
 

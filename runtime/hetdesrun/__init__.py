@@ -178,6 +178,9 @@ def setup_third_party_loggers(
 
 
 if get_config().log_httpx:
+    if get_config().log_use_logfire:
+        import logfire
+        logfire.instrument_httpx()
     setup_third_party_loggers(["httpx", "httpcore"], configure=True, log_job_id_context=True)
 
 # Always strip handlers from uvicorn loggers as they are enabled by default

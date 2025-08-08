@@ -32,6 +32,13 @@ from hetdesrun.webservice.config import get_config
 
 app = get_app()
 
+if get_config().log_use_logfire:
+    try:
+        import logfire
+        logfire.instrument_fastapi(app)
+    except ValueError:
+        pass # ValueError if app has been already instrumented
+
 
 def detect_in_memory_db() -> bool:
     from hetdesrun.persistence.db_engine_and_session import get_db_engine

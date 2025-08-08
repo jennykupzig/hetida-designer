@@ -7,6 +7,7 @@ from collections import deque
 from typing import Any, Literal, TypedDict
 from uuid import UUID
 
+from opentelemetry import trace
 import numpy as np
 from pydantic import BaseModel, Field
 
@@ -14,7 +15,6 @@ from hetdesrun.models.code import CodeModule
 from hetdesrun.utils import Type
 from hetdesrun.webservice.config import get_config
 
-import structlog
 
 class SimplifiedLogRecord(BaseModel):
     timestamp: datetime.datetime = Field(..., description="log timestamp (UTC)")
@@ -28,6 +28,24 @@ class SimplifiedLogRecord(BaseModel):
     operator_hierarchical_name: str | None = None
     operator_hierarchical_id: str | None = None
 
+
+
+def add_open_telemetry_spans(_, __, event_dict):
+    span = trace.get_current_span()
+    if not span.is_recording():
+        event_dict["span"] = None
+        return event_dict
+
+    ctx = span.get_span_context()
+    parent = getattr(span, "parent", None)
+
+    event_dict["span"] = {
+        "span_id": hex(ctx.span_id),
+        "trace_id": hex(ctx.trace_id),
+        "parent_span_id": None if not parent else hex(parent.span_id),
+    }
+
+    return event_dict
 
 class CustomAttributeProcessor:
     """Processor that extracts custom attributes from the stdlib log record"""

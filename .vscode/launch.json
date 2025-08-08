@@ -13,15 +13,15 @@
                 "HD_USE_AUTH":"false",
                 "MAX_WORKERS":"1",
                 "LOG_LEVEL":"DEBUG",
-                "LOG_HTTPX":"true",
+                "LOG_HTTPX":"false",
                 "HETIDA_DESIGNER_PURE_UVICORN":"true",
                 "LOG_DIRECT_PROVISIONING_OUTPUTS":"true",
                 "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT":"http://localhost:4318/v1/traces",
                 "HD_DATABASE_URL":"postgresql+psycopg2://hetida_designer_dbuser:hetida_designer_dbpasswd@localhost:5432/hetida_designer_db",
                 "HD_ENSURE_DB_SCHEMA":"true",
                 "PORT":"8081",
+                "LOGFIRE_DISTRIBUTED_TRACING":"false",
                 "ALLOWED_ORIGINS": "http://127.0.0.1:8080,http://localhost:8080,http://localhost:4200,http://localhost:80,localhost,http://localhost,hetida-designer-demo-adapter-python"
-
             }
         },
         {

@@ -1741,6 +1741,7 @@ opentelemetry-api==1.36.0 \
     #   opentelemetry-instrumentation-fastapi
     #   opentelemetry-instrumentation-httpx
     #   opentelemetry-instrumentation-sqlalchemy
+    #   opentelemetry-instrumentation-system-metrics
     #   opentelemetry-sdk
     #   opentelemetry-semantic-conventions
 opentelemetry-exporter-otlp-proto-common==1.36.0 \
@@ -1760,6 +1761,7 @@ opentelemetry-instrumentation==0.57b0 \
     #   opentelemetry-instrumentation-fastapi
     #   opentelemetry-instrumentation-httpx
     #   opentelemetry-instrumentation-sqlalchemy
+    #   opentelemetry-instrumentation-system-metrics
 opentelemetry-instrumentation-asgi==0.57b0 \
     --hash=sha256:47debbde6af066a7e8e911f7193730d5e40d62effc1ac2e1119908347790a3ea \
     --hash=sha256:a6f880b5d1838f65688fc992c65fbb1d3571f319d370990c32e759d3160e510b
@@ -1775,6 +1777,10 @@ opentelemetry-instrumentation-httpx==0.57b0 \
 opentelemetry-instrumentation-sqlalchemy==0.57b0 \
     --hash=sha256:8a1a815331cb04fc95aa7c50e9c681cdccfb12e1fa4522f079fe4b24753ae106 \
     --hash=sha256:95667326b7cc22bb4bc9941f98ca22dd177679f9a4d277646cc21074c0d732ff
+    # via logfire
+opentelemetry-instrumentation-system-metrics==0.57b0 \
+    --hash=sha256:3b6ecb1807c42af13020d3101e5842d1641e7dedde01f0094edb58f296e36e5c \
+    --hash=sha256:80eba896cf0b00b6d2390f62fce6c4a32818e8c78939110be28bd13e8af13110
     # via logfire
 opentelemetry-proto==1.36.0 \
     --hash=sha256:0f10b3c72f74c91e0764a5ec88fd8f1c368ea5d9c64639fb455e2854ef87dd2f \
@@ -2263,6 +2269,18 @@ protobuf==5.29.4 \
     #   logfire
     #   opentelemetry-proto
     #   ortools
+psutil==7.0.0 \
+    --hash=sha256:101d71dc322e3cffd7cea0650b09b3d08b8e7c4109dd6809fe452dfd00e58b25 \
+    --hash=sha256:1e744154a6580bc968a0195fd25e80432d3afec619daf145b9e5ba16cc1d688e \
+    --hash=sha256:1fcee592b4c6f146991ca55919ea3d1f8926497a713ed7faaf8225e174581e91 \
+    --hash=sha256:39db632f6bb862eeccf56660871433e111b6ea58f2caea825571951d4b6aa3da \
+    --hash=sha256:4b1388a4f6875d7e2aff5c4ca1cc16c545ed41dd8bb596cefea80111db353a34 \
+    --hash=sha256:4cf3d4eb1aa9b348dec30105c55cd9b7d4629285735a102beb4441e38db90553 \
+    --hash=sha256:7be9c3eba38beccb6495ea33afd982a44074b78f28c434a1f51cc07fd315c456 \
+    --hash=sha256:84df4eb63e16849689f76b1ffcb36db7b8de703d1bc1fe41773db487621b6c17 \
+    --hash=sha256:a5f098451abc2828f7dc6b58d44b532b22f2088f4999a937557b603ce72b1993 \
+    --hash=sha256:ba3fcef7523064a6c9da440fc4d6bd07da93ac726b5733c29027d7dc95b39d99
+    # via opentelemetry-instrumentation-system-metrics
 psycopg2==2.9.10 \
     --hash=sha256:0435034157049f6846e95103bd8f5a668788dd913a7c30162ca9503fdf542cb4 \
     --hash=sha256:12ec0b40b0273f95296233e8750441339298e6a572f7039da5b260e3c8b60e11 \

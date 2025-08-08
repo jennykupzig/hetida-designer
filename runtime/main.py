@@ -34,8 +34,9 @@ app = get_app()
 
 if get_config().log_use_logfire:
     try:
-        import logfire
-        logfire.instrument_fastapi(app)
+        pass
+        #import logfire
+        #logfire.instrument_fastapi(app)
     except ValueError:
         pass # ValueError if app has been already instrumented
 

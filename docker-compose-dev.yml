@@ -34,16 +34,15 @@ services:
       - HD_USE_AUTH=false
       - MAX_WORKERS=1
       - LOG_LEVEL=DEBUG
-      - LOG_HTTPX=true
+      - LOG_HTTPX=false
       - HETIDA_DESIGNER_PURE_UVICORN=true
       - LOG_DIRECT_PROVISIONING_OUTPUTS=true
-      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://alternative-backend-opentelemetry:4318/v1/traces
-    healthcheck:
-      test: curl --fail http://hetida-designer-backend:8090/api/info || exit 1
-      interval: 5s
-      timeout: 3s
-      retries: 10
-      start_period: 60s
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://alternative-backend-opentelemetry:4318
+      - OTEL_SERVICE_NAME=rolldice
+      - OTEL_METRIC_EXPORT_INTERVAL=5000" # so we don't have to wait 60s for metrics
+      - LOGFIRE_DISTRIBUTED_TRACING=false
+      - OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true
+      - OTEL_LOGS_EXPORTER=otlp
     depends_on:
       hetida-designer-db:
         condition: service_healthy
@@ -61,7 +60,6 @@ services:
       - designer_obj_repo:/mnt/obj_repo
       - ./runtime/demodata/local_files:/mnt/mounted_local_files
     environment:
-      - RUNTIME_LOCAL_FILE_ADAPTER_LOCAL_DIRECTORIES='["/mnt/mounted_local_files"]'
       - HD_IS_BACKEND_SERVICE=false
       - HD_USE_AUTH=false
       - MAX_WORKERS=1
@@ -69,7 +67,12 @@ services:
       - LOG_HTTPX=true
       - HETIDA_DESIGNER_PURE_UVICORN=true
       - LOG_DIRECT_PROVISIONING_OUTPUTS=true
-      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://alternative-backend-opentelemetry:4318/v1/traces
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://alternative-backend-opentelemetry:4318
+      - OTEL_SERVICE_NAME=rolldice
+      - OTEL_METRIC_EXPORT_INTERVAL=5000" # so we don't have to wait 60s for metrics
+      - LOGFIRE_DISTRIBUTED_TRACING=false
+      - OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true
+      - OTEL_LOGS_EXPORTER=otlp
 
   hetida-designer-db:
     image: postgres:latest
@@ -88,11 +91,16 @@ services:
       timeout: 5s
       retries: 5
 
+
   alternative-backend-opentelemetry:
-    image: jaegertracing/all-in-one:latest
+    image: grafana/otel-lgtm
     ports:
+      - 4317:4317
       - 4318:4318
-      - 16686:16686
+      - 3000:3000
+    environment:
+      - ENABLE_LOGS_ALL=true
+      - OTEL_METRIC_EXPORT_INTERVAL=500
 
 
   hetida-designer-demo-adapter-python:

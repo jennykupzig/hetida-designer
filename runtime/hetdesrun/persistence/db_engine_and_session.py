@@ -67,7 +67,12 @@ def get_db_engine(override_db_url: SecretStr | str | URL | None = None) -> Engin
 
     logger.debug("Created DB Engine with url: %s", repr(engine.url))
 
-    return engine  # type: ignore
+    if get_config().log_use_logfire:
+        pass
+        #import logfire
+        #logfire.instrument_sqlalchemy(engine=engine)
+
+    return engine # type: ignore
 
 
 Session = sessionmaker(get_db_engine())

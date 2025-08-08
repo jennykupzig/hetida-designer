@@ -19,8 +19,6 @@ services:
     depends_on:
       hetida-designer-demo-adapter-python:
         condition: service_started
-    volumes:
-    - ./frontend/src/assets/hetida_designer_config.json:/app/src/assets/hetida_designer_config.json
 
 
   alternative-backend-opentelemetry:

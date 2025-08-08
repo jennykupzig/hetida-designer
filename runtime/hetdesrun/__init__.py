@@ -14,6 +14,7 @@ from hetdesrun.runtime.logging import (
     MinimallyMoreCapableJsonEncoder,
     execution_context_filter,
     job_id_context_filter,
+    add_open_telemetry_spans,
 )
 from hetdesrun.webservice.config import get_config
 
@@ -55,6 +56,7 @@ SHARED_PROCESSORS: list[Processor] = [
     CustomAttributeProcessor(),  # to get added fields from logging.filters in records
     structlog.stdlib.ProcessorFormatter.remove_processors_meta, # removes unneccesary information
     FieldRenamer(), # renames fields
+    add_open_telemetry_spans, # add spans
     structlog.processors.StackInfoRenderer(),
 ]
 
@@ -64,6 +66,16 @@ if get_config().log_use_logfire:
         send_to_logfire=False,
         service_name=NAME,
         service_version=VERSION
+    )
+
+    # enables system_metrics: https://logfire.pydantic.dev/docs/integrations/system-metrics/#installation
+    logfire.instrument_system_metrics(
+        {
+            'process.cpu.utilization': None,
+            'system.cpu.simple_utilization': None,
+            'system.memory.utilization': ['available'],
+            'system.swap.utilization': ['used'],
+        }
     )
 
     SHARED_PROCESSORS.insert(-1, logfire.StructlogProcessor())

@@ -2,7 +2,7 @@
 
 
 ## Log entries by hetida designer
-During the execution of a component or workflow, hetida designer emits structured log records.  
+During the execution of a component or workflow, hetida designer emits structured log records.
 These records are logged as a JSON, containing at least the following fields:
 * timestamp
 * level
@@ -66,3 +66,7 @@ Furthermore `USER_COMPONENT_CODE_LOG_MAX_LEN` can be configured to only display 
 # Logging settings
 
 hetida designer exposes several environment variables controlling logging details. See the [configuration code](../../runtime/hetdesrun/webservice/config.py) for details and descriptions.
+
+# Open telemtry integration
+To enable that logfire sends structlogs to an open telemtry backend, please enable it by defining the environment variable 'LOG_USE_LOGFIRE' with true,
+and set the opentelemtry adress by using [OTEL_EXPORTER_OTLP_ENDPOINT](https://logfire.pydantic.dev/docs/how-to-guides/alternative-backends/).

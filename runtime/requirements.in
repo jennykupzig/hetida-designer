@@ -24,7 +24,7 @@ kaleido
 keras
 libcst
 lightgbm
-logfire[httpx,fastapi,sqlalchemy]
+logfire[httpx,fastapi,sqlalchemy,system-metrics]
 msgspec
 numba!=0.56.2 # due to setuptools dependency resolution problems
 numpy

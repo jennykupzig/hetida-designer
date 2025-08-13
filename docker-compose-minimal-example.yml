@@ -1,0 +1,46 @@
+volumes:
+  grafana:
+    driver: local
+  loki:
+    driver: local
+  prometheus:
+    driver: local
+
+services:
+  alternative-backend-opentelemetry:
+    image: grafana/otel-lgtm
+    network_mode: host
+    ports:
+      - 4317:4317
+      - 4318:4318
+      - 3000:3000
+    environment:
+      - ENABLE_LOGS_LOKI=true
+      - OTEL_METRIC_EXPORT_INTERVAL=500
+      - GF_PATHS_DATA=/data/grafana
+    volumes:
+      - grafana:/data/grafana
+      - prometheus:/data/prometheus
+      - loki:/data/loki
+
+  alternative-backend-opentelemetry-works:
+    network_mode: host
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - 4318:4318
+      - 16686:16686
+
+
+  data_sender:
+    build:
+      context: ./docker-otel-lgtm/examples/python
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      - OTEL_METRIC_EXPORT_INTERVAL="5000"
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://alternative-backend-opentelemetry2:4318
+      - LOGFIRE_CONSOLE_VERBOSE=true
+      - LOGFIRE_HTTPX_CAPTURE_ALL=true
+      - LOGFIRE_SERVICE_NAME=service_name

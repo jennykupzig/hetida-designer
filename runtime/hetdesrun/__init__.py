@@ -69,14 +69,14 @@ if get_config().log_use_logfire:
     )
 
     # enables system_metrics: https://logfire.pydantic.dev/docs/integrations/system-metrics/#installation
-    logfire.instrument_system_metrics(
-        {
-            'process.cpu.utilization': None,
-            'system.cpu.simple_utilization': None,
-            'system.memory.utilization': ['available'],
-            'system.swap.utilization': ['used'],
-        }
-    )
+    # logfire.instrument_system_metrics(
+    #     {
+    #         'process.cpu.utilization': None,
+    #         'system.cpu.simple_utilization': None,
+    #         'system.memory.utilization': ['available'],
+    #         'system.swap.utilization': ['used'],
+    #     }
+    # )
 
     SHARED_PROCESSORS.insert(-1, logfire.StructlogProcessor())
 

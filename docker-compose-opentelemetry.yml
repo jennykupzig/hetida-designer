@@ -1,11 +1,15 @@
-version: "3"
-
 volumes:
   postgres_data:
     driver: local
   designer_obj_repo:
     driver: local
   local_files:
+    driver: local
+  grafana:
+    driver: local
+  prometheus:
+    driver: local
+  loki:
     driver: local
 
 services:
@@ -16,18 +20,24 @@ services:
     network_mode: host
     ports:
       - 4200:4200
-    depends_on:
-      hetida-designer-demo-adapter-python:
-        condition: service_started
-
 
   alternative-backend-opentelemetry:
-    image: jaegertracing/all-in-one:latest
+    image: grafana/otel-lgtm
     network_mode: host
     ports:
+      - 4317:4317
       - 4318:4318
-      - 16686:16686
-
+      - 3000:3000
+    environment:
+      - ENABLE_LOGS_TEMPO=true
+      - OTEL_METRIC_EXPORT_INTERVAL=500
+      - GF_PATHS_DATA=/data/grafana
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
+    volumes:
+      - grafana:/data/grafana
+      - prometheus:/data/prometheus
+      - loki:/data/loki
 
   hetida-designer-db:
     image: postgres:latest
@@ -45,10 +55,3 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
-
-
-  hetida-designer-demo-adapter-python:
-    image: hetida/designer-demo-adapter-python
-    ports:
-      - 8092:8092

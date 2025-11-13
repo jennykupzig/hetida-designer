@@ -180,7 +180,6 @@ let
             source "$venv_target_dir/bin/activate"
         fi
         echo "finished prepare_venv"
-
     }
 
     prepare_venv "''${@}"
@@ -192,7 +191,6 @@ let
 
     echo "BUILD AND ACTIVATE VENV AT ${venvDirRuntime}"
     source ${prepare-venv}/bin/prepare-venv "${projectDir}"/runtime "${venvDirRuntime}" true true "import numpy; import pandas; import sklearn; import scipy; import black; # import tensorflow"
-    "$venvDirRuntime/bin/pip" install -e -U hdhelpers
   '';
 
   prepare-python-demo-adapter-venv = writeShellScriptBin "prepare-python-demo-adapter-venv" ''
@@ -231,7 +229,7 @@ let
     source ${prepare-runtime-venv}/bin/prepare-runtime-venv
 
     cd ${runtimeDir}
-    export HD_DATABASE_URL="postgresql+psycopg2://$(whoami):hetida_designer_dbpasswd@localhost:5432/hetida_designer_db"
+    export HD_DATABASE_URL="postgresql+psycopg://$(whoami):hetida_designer_dbpasswd@localhost:5432/hetida_designer_db"
 
     WRITABLE_SQLITE_TMP_DIR="$(mktemp -d)"
     export SQL_ADAPTER_SQL_DATABASES='
@@ -356,6 +354,7 @@ pkgs.mkShell rec {
     postgresql
     postgresql.pg_config
     postgresql.lib
+    postgresql.pg_config
     # Node
     nodejs_22
     chromium # for tests
@@ -374,13 +373,16 @@ pkgs.mkShell rec {
 
   RUNTIME_VENV_ACTIVATE_COMMAND="${prepare-runtime-venv}/bin/prepare-runtime-venv";
   # To manually activate runtime venv in
-  # use via 
+  # use via
   #     source $RUNTIME_VENV_ACTIVATE_COMMAND
 
 
   shellHook = ''
     set -e
     SOURCE_DATE_EPOCH=$(date +%s)
+    set +e
+    echo ${postgresql.lib}
+    echo ${postgresql}
 
     ${prepare-runtime-venv}/bin/prepare-runtime-venv
 
